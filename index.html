@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FPT Play - Hackathon 2026 - Build for Real</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        fpt: {
+                            orange: '#FF5000',
+                            red: '#E52400',
+                            yellow: '#FFB800',
+                            light: '#FFF5F0',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800;1,900&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            overflow-x: hidden;
+            background: radial-gradient(circle at 70% 30%, #ffffff 0%, #fff0e6 40%, #ffe0cc 100%);
+            color: #1e293b;
+        }
+
+        /* Glassmorphism trên nền sáng */
+        .glass-bright {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 80, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(255, 80, 0, 0.05);
+        }
+
+        /* Gradient chữ lửa (Đỏ -> Cam -> Vàng) */
+        .text-gradient-fiery {
+            background: linear-gradient(90deg, #E52400 0%, #FF5000 50%, #FFB800 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Nút/Pill Gradient Đỏ-Cam */
+        .bg-gradient-fiery {
+            background: linear-gradient(90deg, #E52400 0%, #FF5000 100%);
+        }
+
+        /* Viền sáng (Glow) */
+        .glow-orange-box {
+            box-shadow: 0 0 25px rgba(255, 80, 0, 0.3);
+        }
+
+        /* Bục đứng 3D (Stage) */
+        .tech-stage {
+            transform: rotateX(70deg);
+            transform-style: preserve-3d;
+        }
+        .stage-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 80, 0, 0.6);
+            box-shadow: 0 0 20px rgba(255, 80, 0, 0.5), inset 0 0 20px rgba(255, 80, 0, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative">
+
+    <!-- Lưới nền trang trí -->
+    <div class="fixed inset-0 pointer-events-none opacity-20" style="background-image: linear-gradient(rgba(255,80,0,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,80,0,0.1) 1px, transparent 1px); background-size: 40px 40px; z-index: -1;"></div>
+
+    <!-- HEADER / NAVIGATION MENU -->
+    <header class="sticky top-0 z-50 glass-bright border-b border-fpt-orange/20 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#home" class="flex items-center gap-2 font-black text-2xl tracking-wider">
+                <div class="w-8 h-8 bg-fpt-orange text-white rounded-lg flex items-center justify-center shadow-lg shadow-fpt-orange/40">
+                    <span class="text-lg">▶</span>
+                </div>
+                <span class="text-fpt-orange">FPT PLAY</span>
+            </a>
+            
+            <!-- Dynamic Navigation Bar -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-bold text-slate-700">
+                <a href="#home" class="hover:text-fpt-orange transition-colors">Trang chủ</a>
+                <a href="#about" class="hover:text-fpt-orange transition-colors">Giới thiệu</a>
+                <a href="#stages" class="hover:text-fpt-orange transition-colors">Hành trình</a>
+                <a href="#prizes" class="hover:text-fpt-orange transition-colors">Giải thưởng</a>
+            </nav>
+
+            <div>
+                <a href="#register" id="btn-cta-header" class="inline-block bg-gradient-fiery text-white font-bold text-sm px-6 py-2.5 rounded-full hover:scale-105 transition-transform shadow-lg shadow-fpt-orange/40 border-2 border-white">
+                    Đăng Ký
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- RIGHT VERTICAL NAV -->
+    <nav class="fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-4">
+        <a href="#home" class="group flex flex-col items-center justify-center w-16 h-16 glass-bright rounded-2xl hover:scale-110 transition-transform cursor-pointer border border-fpt-orange/30">
+            <span class="text-fpt-orange text-xl font-bold mb-1">🏠</span>
+            <span class="text-[9px] font-black text-fpt-orange uppercase">Home</span>
+        </a>
+        <a href="#about" class="group flex flex-col items-center justify-center w-16 h-16 glass-bright rounded-2xl hover:scale-110 transition-transform cursor-pointer border border-fpt-orange/30">
+            <span class="text-fpt-orange text-xl font-bold mb-1">🤖</span>
+            <span class="text-[9px] font-black text-fpt-orange uppercase">About</span>
+        </a>
+        <a href="#stages" class="group flex flex-col items-center justify-center w-16 h-16 glass-bright rounded-2xl hover:scale-110 transition-transform cursor-pointer border border-fpt-orange/30">
+            <span class="text-fpt-orange text-xl font-bold mb-1">🚀</span>
+            <span class="text-[9px] font-black text-fpt-orange uppercase">Stages</span>
+        </a>
+        <a href="#prizes" class="group flex flex-col items-center justify-center w-16 h-16 glass-bright rounded-2xl hover:scale-110 transition-transform cursor-pointer border border-fpt-orange/30">
+            <span class="text-fpt-orange text-xl font-bold mb-1">🏆</span>
+            <span class="text-[9px] font-black text-fpt-orange uppercase">Prizes</span>
+        </a>
+        <a href="#register" class="group flex flex-col items-center justify-center w-16 h-16 bg-gradient-fiery rounded-2xl hover:scale-110 transition-transform cursor-pointer border border-white text-white">
+            <span class="text-xl font-bold mb-1">📝</span>
+            <span class="text-[9px] font-black uppercase">Apply</span>
+        </a>
+    </nav>
+
+    <!-- SECTION 1: TRANG CHỦ (HERO SECTION) -->
+    <section id="home" class="relative pt-12 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between min-h-[85vh]">
+        <!-- Cột Trái: Typography -->
+        <div class="w-full lg:w-3/5 space-y-6 relative z-10">
+            <div class="space-y-0">
+                <h2 class="text-5xl md:text-7xl font-black italic tracking-tighter text-slate-900 drop-shadow-sm">
+                    HACK<span class="text-slate-800">Λ</span>THON
+                </h2>
+                <div class="inline-block relative">
+                    <h1 class="text-7xl md:text-[8.5rem] leading-none font-black italic tracking-tighter text-gradient-fiery glow-orange-box bg-white px-6 py-2 rounded-[2rem] border-[6px] border-fpt-orange relative z-10 shadow-2xl shadow-fpt-orange/30">
+                        2026
+                    </h1>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <div class="bg-gradient-fiery inline-block px-8 py-3 rounded-tr-[2rem] rounded-bl-[2rem] shadow-xl shadow-fpt-red/30 border-2 border-white">
+                    <h3 class="text-3xl md:text-5xl font-black italic text-white tracking-wide">Build for Real</h3>
+                </div>
+            </div>
+
+            <div class="mt-4 bg-white/80 backdrop-blur-md inline-block px-6 py-2 rounded-lg border border-slate-200 shadow-sm">
+                <p class="text-lg md:text-xl font-bold text-slate-800">
+                    AI & Automation giải bài toán của chính bạn
+                </p>
+            </div>
+
+            <!-- PROPOSAL Divider -->
+            <div class="mt-10 pt-6">
+                <div class="flex items-center gap-4 text-fpt-orange">
+                    <span class="font-black tracking-widest opacity-60">>>></span>
+                    <h4 class="text-3xl md:text-4xl font-black italic tracking-widest">PROPOSAL</h4>
+                    <span class="font-black tracking-widest opacity-60"><<<</span>
+                </div>
+            </div>
+
+            <!-- Info Footer -->
+            <div class="glass-bright rounded-2xl p-5 flex flex-col md:flex-row justify-between items-center gap-6 mt-8 max-w-2xl border-2 border-white">
+                <div class="flex items-center gap-4 w-full">
+                    <div class="w-10 h-10 rounded-full border-2 border-fpt-orange text-fpt-orange flex items-center justify-center font-bold text-xl">📅</div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-fpt-orange font-bold uppercase tracking-wider">Thời gian</span>
+                        <span class="text-sm font-black text-slate-800">07/2026 - 10/2026</span>
+                    </div>
+                </div>
+                <div class="w-full h-px md:w-px md:h-12 bg-slate-300"></div>
+                <div class="flex items-center gap-4 w-full">
+                    <div class="w-10 h-10 rounded-full border-2 border-fpt-orange text-fpt-orange flex items-center justify-center font-bold text-xl">👥</div>
+                    <div class="flex flex-col">
+                        <span class="text-[10px] text-fpt-orange font-bold uppercase tracking-wider">Đối tượng</span>
+                        <span class="text-sm font-black text-slate-800">TOÀN THỂ CBNV FPT PLAY</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cột Phải: Sân khấu (Stage) & Mascot Visual -->
+        <div class="w-full lg:w-2/5 mt-16 lg:mt-0 relative flex justify-center items-end h-[500px]">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-white rounded-full blur-[80px] opacity-80 z-0"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-fpt-yellow/40 rounded-full blur-[60px] opacity-60 z-0"></div>
+
+            <div class="absolute bottom-10 w-[80%] md:w-[400px] h-[120px] tech-stage z-10 flex items-center justify-center">
+                <div class="stage-ring w-full h-full bg-white/40 backdrop-blur-md"></div>
+                <div class="stage-ring w-[80%] h-[80%] border-[6px] border-white/80 bg-fpt-orange/10"></div>
+                <div class="stage-ring w-[50%] h-[50%] border-4 border-fpt-yellow/80 bg-fpt-yellow/20 glow-orange-box"></div>
+                <div class="absolute w-[30%] h-[30%] bg-white rounded-full blur-md"></div>
+            </div>
+
+            <!-- Mascot Hero Illustration -->
+            <div class="relative z-20 flex flex-col items-center justify-center mb-16 transition-transform hover:scale-105">
+                <div class="relative w-56 h-72 bg-gradient-to-b from-white via-orange-50 to-orange-100 rounded-[3.5rem] border-[6px] border-white shadow-2xl flex flex-col items-center p-4">
+                    <div class="absolute -left-3 top-20 w-6 h-12 bg-fpt-orange rounded-l-xl border-2 border-white"></div>
+                    <div class="absolute -right-3 top-20 w-6 h-12 bg-fpt-orange rounded-r-xl border-2 border-white"></div>
+                    <div class="w-12 h-12 bg-fpt-orange rounded-2xl rotate-45 flex items-center justify-center shadow-lg border-2 border-white -mt-8">
+                        <span class="text-white text-lg -rotate-45 ml-0.5">▶</span>
+                    </div>
+                    <div class="w-36 h-20 bg-slate-900 rounded-3xl mt-4 flex items-center justify-around px-4 border-2 border-slate-700 shadow-inner">
+                        <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                            <div class="w-4 h-4 bg-fpt-orange rounded-full"></div>
+                        </div>
+                        <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                            <div class="w-4 h-4 bg-fpt-orange rounded-full"></div>
+                        </div>
+                    </div>
+                    <div class="mt-4 w-32 h-20 bg-fpt-orange rounded-2xl flex flex-col items-center justify-center border-2 border-white relative">
+                        <div class="text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-1">
+                            <span>▶</span> FPT Play
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: GIỚI THIỆU (CONCEPT & MASCOT PLAYON) -->
+    <section id="about" class="py-20 relative z-10 border-t border-fpt-orange/10 bg-white/40 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex items-center gap-4 mb-10">
+                <span class="px-6 py-2 bg-gradient-fiery text-white font-black text-lg rounded-xl tracking-widest uppercase shadow-md shadow-fpt-orange/30">
+                    CONCEPT & MASCOT
+                </span>
+                <div class="h-1 bg-gradient-to-r from-fpt-orange to-transparent flex-1 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-7 space-y-8">
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-black text-fpt-orange uppercase tracking-wide mb-3">
+                            PLAYON – NGƯỜI HÙNG ĐẾN TỪ TƯƠNG LAI
+                        </h2>
+                        <p class="text-slate-700 font-medium leading-relaxed text-sm md:text-base">
+                            Xây dựng câu chuyện về 1 mascot người hùng đến từ tương lai xuyên suốt cả chiến dịch. Trong tương lai, khi công việc ngày càng phức tạp, con người bị cuốn vào những tác vụ lặp đi lặp lại và hàng nghìn quy trình thủ công mỗi ngày, một tín hiệu đặc biệt được gửi đi từ FPT Play. Từ nguồn năng lượng của sự sáng tạo, công nghệ và khát vọng đổi mới, <strong class="text-fpt-orange font-extrabold">PLAYON được kích hoạt</strong>.
+                        </p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4 p-4 rounded-2xl glass-bright border-l-4 border-l-fpt-orange hover:translate-x-2 transition-transform">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-fiery flex items-center justify-center text-white text-xl font-black shrink-0 shadow-md shadow-fpt-orange/30">
+                                ▶
+                            </div>
+                            <div>
+                                <h3 class="font-black text-fpt-orange text-base uppercase">BIỂU TƯỢNG PLAY</h3>
+                                <p class="text-xs md:text-sm text-slate-600 font-semibold mt-1">
+                                    Không chỉ là logo FPT Play. Đó còn là nút bắt đầu của mọi sự thay đổi.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 rounded-2xl glass-bright border-l-4 border-l-fpt-orange hover:translate-x-2 transition-transform">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-fiery flex items-center justify-center text-white text-xl font-black shrink-0 shadow-md shadow-fpt-orange/30">
+                                🧥
+                            </div>
+                            <div>
+                                <h3 class="font-black text-fpt-orange text-base uppercase">ÁO CHOÀNG CAM</h3>
+                                <p class="text-xs md:text-sm text-slate-600 font-semibold mt-1">
+                                    Biểu tượng cho tinh thần tiên phong, dám thử nghiệm và dám tạo khác biệt.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 rounded-2xl glass-bright border-l-4 border-l-fpt-orange hover:translate-x-2 transition-transform">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-fiery flex items-center justify-center text-white text-xl font-black shrink-0 shadow-md shadow-fpt-orange/30">
+                                ⭐
+                            </div>
+                            <div>
+                                <h3 class="font-black text-fpt-orange text-base uppercase">ĐÔI MẮT LỚN</h3>
+                                <p class="text-xs md:text-sm text-slate-600 font-semibold mt-1">
+                                    Đại diện cho sự tò mò không ngừng và khả năng nhìn thấy cơ hội trong mọi thách thức.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 grid grid-cols-2 gap-4">
+                    <div class="glass-bright rounded-2xl p-4 flex flex-col items-center text-center border-2 border-white shadow-sm hover:scale-105 transition-transform">
+                        <div class="w-20 h-24 bg-gradient-to-tr from-fpt-orange to-fpt-yellow rounded-2xl mb-2 flex items-center justify-center text-white text-3xl shadow-inner">
+                            🤖
+                        </div>
+                        <span class="text-[11px] font-black text-slate-500 uppercase tracking-wider">GÓC NGHIÊNG</span>
+                    </div>
+
+                    <div class="glass-bright rounded-2xl p-4 flex flex-col items-center text-center border-2 border-white shadow-sm hover:scale-105 transition-transform">
+                        <div class="w-20 h-24 bg-gradient-to-tr from-fpt-red to-fpt-orange rounded-2xl mb-2 flex items-center justify-center text-white text-xs font-black p-2 shadow-inner">
+                            FPT Play
+                        </div>
+                        <span class="text-[11px] font-black text-slate-500 uppercase tracking-wider">MẶT SAU</span>
+                    </div>
+
+                    <div class="col-span-2 glass-bright rounded-2xl p-4 flex items-center justify-between border-2 border-fpt-orange/30 shadow-md">
+                        <div class="flex items-center gap-3">
+                            <div class="w-16 h-16 bg-fpt-orange rounded-xl flex items-center justify-center text-white text-2xl font-bold">
+                                🏃
+                            </div>
+                            <div class="text-left">
+                                <h4 class="font-black text-slate-800 text-sm">TẠO DÁNG SẴN SÀNG</h4>
+                                <p class="text-[11px] text-fpt-orange font-bold">Kích hoạt nguồn năng lượng mới</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-black bg-fpt-orange/10 text-fpt-orange px-3 py-1 rounded-full uppercase">PLAYON 3D</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-16 pt-8 border-t border-slate-300/60 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div class="p-4 glass-bright rounded-2xl border border-white">
+                    <div class="text-2xl mb-1">💡</div>
+                    <div class="text-xs font-black text-fpt-orange uppercase">SÁNG TẠO</div>
+                    <div class="text-[10px] font-bold text-slate-500">Không giới hạn</div>
+                </div>
+                <div class="p-4 glass-bright rounded-2xl border border-white">
+                    <div class="text-2xl mb-1">&lt;/&gt;</div>
+                    <div class="text-xs font-black text-fpt-orange uppercase">CÔNG NGHỆ</div>
+                    <div class="text-[10px] font-bold text-slate-500">Dẫn lối</div>
+                </div>
+                <div class="p-4 glass-bright rounded-2xl border border-white">
+                    <div class="text-2xl mb-1">⚙️</div>
+                    <div class="text-xs font-black text-fpt-orange uppercase">TỰ ĐỘNG HÓA</div>
+                    <div class="text-[10px] font-bold text-slate-500">Tối ưu mọi thứ</div>
+                </div>
+                <div class="p-4 glass-bright rounded-2xl border border-white">
+                    <div class="text-2xl mb-1">🎯</div>
+                    <div class="text-xs font-black text-fpt-orange uppercase">GIÁ TRỊ THỰC</div>
+                    <div class="text-[10px] font-bold text-slate-500">Tạo tác động thật</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SECTION 3: HÀNH TRÌNH (STAGES) -->
+    <section id="stages" class="py-20 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-black text-slate-800 uppercase tracking-wider mb-2">Hành trình 3 giai đoạn</h2>
+                <p class="text-fpt-orange font-bold text-lg">Từ ý tưởng đến giải pháp thực tiễn</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Giai đoạn 1 -->
+                <div class="glass-bright rounded-3xl p-8 relative hover:-translate-y-2 transition-transform border-2 border-white group">
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-fiery text-white font-black text-xl flex items-center justify-center shadow-lg shadow-fpt-orange/40 border-2 border-white">
+                        1
+                    </div>
+                    <div class="mt-4 text-center">
+                        <h3 class="text-2xl font-black text-slate-800 mb-1">PLAYON</h3>
+                        <p class="text-fpt-orange text-xs font-bold uppercase mb-6 tracking-wider">Người hùng tương lai</p>
+                        <ul class="text-sm font-semibold text-slate-600 space-y-3 text-left">
+                            <li class="flex items-start gap-2"><span class="text-fpt-orange">▶</span> Khởi động & Truyền thông</li>
+                            <li class="flex items-start gap-2"><span class="text-fpt-orange">▶</span> Workshop & Training Course</li>
+                            <li class="flex items-start gap-2"><span class="text-fpt-orange">▶</span> Chọn 20 bài toán tiêu biểu</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Giai đoạn 2 -->
+                <div class="glass-bright rounded-3xl p-8 relative hover:-translate-y-2 transition-transform border-2 border-fpt-orange/50 group">
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-fiery text-white font-black text-xl flex items-center justify-center shadow-lg shadow-fpt-orange/40 border-2 border-white">
+                        2
+                    </div>
+                    <div class="mt-4 text-center">
+                        <h3 class="text-2xl font-black text-slate-800 mb-1">BUILD UP</h3>
+                        <p class="text-fpt-orange text-xs font-bold uppercase mb-6 tracking-wider">Xây dựng giải pháp</p>
+                        <ul class="text-sm font-semibold text-slate-600 space-y-3 text-left">
+                            <li class="flex items-start gap-2"><span class="text-fpt-orange">▶</span> Phát triển MVP/Prototype</li>
+                            <li class="flex items-start gap-2"><span class="text-fpt-orange">▶</span> Mentor đồng hành 1-1</li>
+                            <li class="flex items-start gap-2"><span class="text-fpt-orange">▶</span> Chọn 04 đội vào Chung kết</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Giai đoạn 3 -->
+                <div class="glass-bright rounded-3xl p-8 relative hover:-translate-y-2 transition-transform border-2 border-white group">
+                    <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-gradient-fiery text-white font-black text-xl flex items-center justify-center shadow-lg shadow-fpt-orange/40 border-2 border-white">
+                        3
+                    </div>
+                    <div class="mt-4 text-center">
+                        <h3 class="text-2xl font-black text-slate-800 mb-1">MAKE IT REAL</h3>
+                        <p class="text-fpt-orange text-xs font-bold uppercase mb-6 tracking-wider">Tạo giá trị thực</p>
+                        <ul class="text-sm font-semibold text-slate-600 space-y-3 text-left">
+                            <li class="flex items-start gap-2"><span class="text-fpt-orange">▶</span> Pitching & Giải bài toán trực tiếp</li>
+                            <li class="flex items-start gap-2"><span class="text-fpt-orange">▶</span> Phản biện (Debate) với BGK</li>
+                            <li class="flex items-start gap-2"><span class="text-fpt-orange">▶</span> Vinh danh & Trao giải</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: GIẢI THƯỞNG (PRIZES) -->
+    <section id="prizes" class="py-20 relative z-10 bg-white/40 backdrop-blur-md border-t border-fpt-orange/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-black text-slate-800 uppercase tracking-wider mb-2">Vinh danh bứt phá</h2>
+            <p class="text-fpt-orange font-bold text-lg mb-16">Mỗi ý tưởng là một bước tiến - Mỗi giải thưởng là một dấu ấn</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Quán quân -->
+                <div class="glass-bright rounded-3xl p-6 relative overflow-hidden group hover:scale-105 transition-transform border-2 border-fpt-orange shadow-xl shadow-fpt-orange/20">
+                    <div class="absolute top-0 inset-x-0 h-2 bg-gradient-fiery"></div>
+                    <h4 class="text-xl font-bold text-slate-600 mb-1 mt-2">QUÁN QUÂN</h4>
+                    <p class="text-gradient-fiery font-black italic text-xl mb-4">THE REAL HEROES</p>
+                    <div class="text-3xl font-black text-slate-800 mb-2">5.000.000<span class="text-lg text-slate-500 font-bold">đ</span></div>
+                </div>
+
+                <!-- Á quân -->
+                <div class="glass-bright rounded-3xl p-6 relative overflow-hidden hover:scale-105 transition-transform border border-white">
+                    <h4 class="text-lg font-bold text-slate-600 mb-1">Á QUÂN</h4>
+                    <p class="text-fpt-orange font-black italic text-lg mb-4">AUTOMATION MASTER</p>
+                    <div class="text-2xl font-black text-slate-800 mb-2">4.000.000<span class="text-sm text-slate-500 font-bold">đ</span></div>
+                </div>
+
+                <!-- Quý quân -->
+                <div class="glass-bright rounded-3xl p-6 relative overflow-hidden hover:scale-105 transition-transform border border-white">
+                    <h4 class="text-lg font-bold text-slate-600 mb-1">QUÝ QUÂN</h4>
+                    <p class="text-fpt-orange font-black italic text-lg mb-4">FUTURE BUILDER</p>
+                    <div class="text-2xl font-black text-slate-800 mb-2">3.000.000<span class="text-sm text-slate-500 font-bold">đ</span></div>
+                </div>
+
+                <!-- Bình chọn -->
+                <div class="glass-bright rounded-3xl p-6 relative overflow-hidden hover:scale-105 transition-transform border border-white">
+                    <h4 class="text-lg font-bold text-slate-600 mb-1">BÌNH CHỌN</h4>
+                    <p class="text-fpt-yellow font-black italic text-lg mb-4">PLAYON CHOICE</p>
+                    <div class="text-2xl font-black text-slate-800 mb-2">1.000.000<span class="text-sm text-slate-500 font-bold">đ</span></div>
+                    <p class="text-xs text-slate-400 font-bold uppercase">Quy đổi GOLD</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: ĐĂNG KÝ (REGISTER FORM) -->
+    <section id="register" class="py-20 relative z-10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-bright rounded-3xl p-8 md:p-12 border-2 border-fpt-orange shadow-2xl shadow-fpt-orange/20 relative">
+                <div class="text-center mb-10">
+                    <span class="px-4 py-1.5 bg-fpt-orange/10 text-fpt-orange font-black text-xs rounded-full uppercase tracking-widest border border-fpt-orange/30">
+                        Sẵn sàng bứt phá
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-black text-slate-800 uppercase tracking-wider mt-3">Đăng Ký Tham Gia</h2>
+                    <p class="text-slate-600 font-semibold mt-2">Dữ liệu đăng ký sẽ được tự động đồng bộ về Google Sheet tổ chức Hackathon 2026</p>
+                </div>
+
+                <form id="form-register" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-black text-slate-700 uppercase mb-2">Họ và tên trưởng nhóm / Cá nhân *</label>
+                            <input type="text" id="input-fullname" name="fullname" required placeholder="Nguyễn Văn A" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-fpt-orange focus:ring-2 focus:ring-fpt-orange/20 font-semibold text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-slate-700 uppercase mb-2">Email công ty (FPT Play) *</label>
+                            <input type="email" id="input-email" name="email" required placeholder="anv@fpt.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-fpt-orange focus:ring-2 focus:ring-fpt-orange/20 font-semibold text-sm">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-black text-slate-700 uppercase mb-2">Phòng ban / Bộ phận *</label>
+                            <input type="text" id="input-department" name="department" required placeholder="Nghiên cứu & Phát triển / HR / Product..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-fpt-orange focus:ring-2 focus:ring-fpt-orange/20 font-semibold text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-slate-700 uppercase mb-2">Tên đội (Nếu có)</label>
+                            <input type="text" id="input-team" name="team" placeholder="Tên đội thi đột phá" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-fpt-orange focus:ring-2 focus:ring-fpt-orange/20 font-semibold text-sm">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-black text-slate-700 uppercase mb-2">Tên ý tưởng / Bài toán tự động hóa muốn giải quyết *</label>
+                        <textarea id="input-idea" name="idea" rows="4" required placeholder="Mô tả ngắn gọn quy trình thủ công hoặc bài toán bạn muốn ứng dụng AI/Automation..." class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:border-fpt-orange focus:ring-2 focus:ring-fpt-orange/20 font-semibold text-sm"></textarea>
+                    </div>
+
+                    <div class="text-center pt-4">
+                        <button type="submit" id="btn-submit" class="w-full md:w-auto px-12 py-4 bg-gradient-fiery text-white font-black text-base rounded-full shadow-xl shadow-fpt-orange/40 hover:scale-105 transition-transform border-2 border-white">
+                            GỬI ĐĂNG KÝ NGAY ▶
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="glass-bright border-t border-fpt-orange/20 py-8 text-sm text-slate-600 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 font-black text-slate-800">
+                <span class="text-fpt-orange">▶ FPT PLAY</span> HACKATHON 2026
+            </div>
+            <p class="font-bold">&copy; 2026 FPT Play. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE & DEFENSIVE SCRIPT (CONNECTED TO YOUR LIVE WEB APP) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // URL Web App Google Apps Script chính thức của bạn
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzsmwi--KXejsC5SoeCJ7-WzIY7ukJbF1W5JdjEH_IxHbWJ9uJasGfsH5rozvGzgRyblQ/exec';
+
+            try {
+                const formRegister = document.getElementById('form-register');
+                const btnSubmit = document.getElementById('btn-submit');
+
+                if (formRegister) {
+                    formRegister.addEventListener('submit', function (e) {
+                        try {
+                            if (!e) return;
+                            e.preventDefault();
+
+                            // Lấy dữ liệu an toàn & kiểm tra null/undefined
+                            const fullname = document.getElementById('input-fullname')?.value || '';
+                            const email = document.getElementById('input-email')?.value || '';
+                            const department = document.getElementById('input-department')?.value || '';
+                            const team = document.getElementById('input-team')?.value || '';
+                            const idea = document.getElementById('input-idea')?.value || '';
+
+                            if (!fullname || !email || !department || !idea) {
+                                alert('Vui lòng điền đầy đủ các thông tin bắt buộc (*)!');
+                                return;
+                            }
+
+                            // Chuyển trạng thái nút gửi thành Loading
+                            if (btnSubmit) {
+                                btnSubmit.disabled = true;
+                                btnSubmit.innerHTML = 'Đang ghi nhận dữ liệu... ⏳';
+                                btnSubmit.classList.add('opacity-70', 'cursor-not-allowed');
+                            }
+
+                            // Chuyển sang FormData chuẩn gửi form không lo CORS
+                            const formData = new FormData(formRegister);
+
+                            // Bắn request POST tới Google Sheet API ngầm
+                            fetch(SCRIPT_URL, {
+                                method: 'POST',
+                                mode: 'no-cors',
+                                body: formData
+                            })
+                            .then(() => {
+                                alert(`Cảm ơn ${fullname}! Đơn đăng ký tham gia Hackathon 2026 đã được lưu trực tiếp vào Google Sheet thành công. PLAYON sẽ sớm liên hệ qua email ${email}!`);
+                                formRegister.reset();
+                            })
+                            .catch((err) => {
+                                console.error('[Core Dev] Lỗi khi gửi đơn lên Google Sheet:', err);
+                                alert('Có lỗi xảy ra khi kết nối mạng. Vui lòng thử lại sau!');
+                            })
+                            .finally(() => {
+                                if (btnSubmit) {
+                                    btnSubmit.disabled = false;
+                                    btnSubmit.innerHTML = 'GỬI ĐĂNG KÝ NGAY ▶';
+                                    btnSubmit.classList.remove('opacity-70', 'cursor-not-allowed');
+                                }
+                            });
+
+                        } catch (formErr) {
+                            console.error('[Core Dev] Lỗi xử lý Form Submit:', formErr);
+                            if (btnSubmit) {
+                                btnSubmit.disabled = false;
+                                btnSubmit.innerHTML = 'GỬI ĐĂNG KÝ NGAY ▶';
+                                btnSubmit.classList.remove('opacity-70', 'cursor-not-allowed');
+                            }
+                        }
+                    });
+                }
+
+                // Navigation cuộn mượt an toàn
+                const navLinks = document.querySelectorAll('a[href^="#"]');
+                if (navLinks && navLinks.length > 0) {
+                    navLinks.forEach(link => {
+                        link.addEventListener('click', function (e) {
+                            try {
+                                if (!e || !e.currentTarget) return;
+                                const href = e.currentTarget.getAttribute('href');
+                                if (href && href !== '#' && href.length > 1) {
+                                    const targetElement = document.querySelector(href);
+                                    if (targetElement) {
+                                        e.preventDefault();
+                                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                                    }
+                                }
+                            } catch (navErr) {
+                                console.error('[Core Dev] Lỗi điều hướng cuộn trang:', navErr);
+                            }
+                        });
+                    });
+                }
+
+            } catch (globalErr) {
+                console.error('[Core Dev] Quá trình khởi tạo giao diện bị gián đoạn:', globalErr);
+            }
+        });
+    </script>
+</body>
+</html>
